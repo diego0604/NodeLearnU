@@ -138,7 +138,7 @@ La API proporciona los siguientes endpoints para gestionar usuarios, proyectos y
 1. Abre Postman
 2. Haz clic en "Import"
 3. Selecciona el archivo de colección en la carpeta `postman/`
-4. La colección "NodeLearnU API" aparecerá en tu lista de colecciones
+4. La colección "API" aparecerá en tu lista de colecciones
 
 ### Configuración de Variables
 
