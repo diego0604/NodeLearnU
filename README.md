@@ -74,12 +74,12 @@ NodeLearnU/
 
 2. Ejecuta el script de estructura:
    ```bash
-   psql -d nodelearnudb -f SQL/PostgresStructureDb.sql
+    SQL/PostgresStructureDb.sql
    ```
 
 3. Carga los datos iniciales:
    ```bash
-   psql -d nodelearnudb -f SQL/seeds.sql
+    SQL/seeds.sql
    ```
 
 ### Estructura de la Base de Datos
