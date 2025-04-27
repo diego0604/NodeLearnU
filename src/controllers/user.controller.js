@@ -1,18 +1,22 @@
 // Importar servicio de usuarios
 const userService = require('../services/user.service');
+const User = require('../models/user.model');
+const bcrypt = require('bcrypt');
 
-// Controlador para crear nuevos usuarios
+
 exports.createUser = async (req, res) => {
     try { 
-        const { nombre, email, password, rol_id, administrador_id } = req.body; 
-        const newUser = await userService.createUser(nombre, email, password, rol_id, administrador_id);
-        res.status(201).json({ message: 'Usuario creado con éxito', user: newUser }); // 201 estatus created 
+        const { nombre, email, password, rol_id} = req.body; // Se extrae los datos de la solicitud para el nuevo usuario
+        console.log(req.body)
+        const newUser = await userService.createUser(nombre, email, password, rol_id);
+        res.status(201).json({ message: 'Usuario creado con éxito', user: newUser }); // 281 para la creacion de nuevos ususarios
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        console.log(err);
+        res.status(500).json({ message: err.message});
     }
 };
-
 // Controlador para obtener todos los usuarios asociados a un administrador 
+// req que contiene los datos de la solicitud  y res que se utiliza para enviar las solicitudes
 exports.getAllUsersByAdministradorId = async (req, res) => {
     try {
         const admin_from_token = req.user.id; // Se extrae el id del administrador del token de autenticación
@@ -34,15 +38,61 @@ exports.getAllUsersByRolId = async (req, res) => {
     }
 };
 
+
+
+
+// Controlador corregido para obtener un usuario por ID
+exports.getUserById = async (req, res) => {
+    try {
+        const user = await userService.getUserById(req.params.id);
+        
+        if (!user) {
+            return res.status(404).json({ 
+                success: false,
+                message: 'Usuario no encontrado' 
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Usuario encontrado',
+            data: user
+        });
+
+    } catch (error) {
+        console.error('Error en getUserById:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error al buscar el usuario',
+            error: error.message // Solo envía el mensaje de error, no todo el objeto
+        });
+    }
+};
+
+
+// Controlador para obtener un usuario por su ID único ultimo agregado
+/*exports.getUserById = async (req, res) => {
+    try {
+        const user = await userService.getUserById(req.params.id); // Llama a un servicio nuevo
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+        res.status(200).json({ message: 'Usuario encontrado', user });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al buscar el usuario', error });
+    }
+};*/
+
 // Controlador para actualizar un usuario
 exports.updateUser = async (req, res) => {
-    const { id } = req.params; 
-    const { nombre, email, rol_id, administrador_id } = req.body; 
+    const { id } = req.params; // extrae el id de la URL enviado como parametro
+    const { nombre, email, rol_id } = req.body; // se extrae los datos actualizados 
     const admin_from_token = req.user.id;
     try {
-        const user = await userService.updateUser(id, nombre, email, rol_id, administrador_id, admin_from_token);
+        const user = await userService.updateUser(id, nombre, email, rol_id, admin_from_token);
         res.status(200).json({ message: 'El susuario a actualizado con éxito', user });
     } catch (err) {
+        console.log(err);
         res.status(500).json({ message: err.message });
     }
 };
@@ -58,3 +108,5 @@ exports.deleteUser = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+

@@ -1,11 +1,11 @@
 // Importar servicio de proyectos
 const projectService = require('../services/project.service');
 
-// Controlador para crear un nuevo proyecto
+// Controlador para crear nuevos proyectos
 exports.createProject = async (req, res) => {
     try {
-        const { nombre, descripcion, administrador_id } = req.body;
-        const admin_from_token = req.user.administrador_id;
+        let { nombre, descripcion, administrador_id } = req.body;
+        let admin_from_token = req.user.administrador_id;
         const newProject = await projectService.createProject(nombre, descripcion, administrador_id, admin_from_token);
         res.status(201).json({ message: 'Proyecto creado con éxito', newProject});
     } catch (err) {
@@ -14,11 +14,30 @@ exports.createProject = async (req, res) => {
 };
 
 // Controlador para obtener todos los proyectos asociados a un administrador
-exports.getAllProjectsByAdministradorId = async (req, res) => {
+exports.getAllProjects = async (req, res) => {
     try {
-        const administrador_id = req.user.id;
-        const projects = await projectService.getAllProjectsByAdministradorId(administrador_id);
+        const projects = await projectService.getAllProjects();
         res.status(200).json({ message: 'Proyectos obtenidos con éxito', projects });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+exports.assingUsersToProject = async (req, res) => {
+    try {
+        const data = req.body;
+        const project = await projectService.assingUsersToProject(data);
+        res.status(200).json({ message: 'Usuarios asignados al proyecto con éxito', project });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+exports.removeUserFromProject = async (req, res) => {
+    try {
+        const data = req.body;
+        const result = await projectService.removeUserFromProject(data);
+        res.status(200).json({ message: 'Usuario eliminado del proyecto con éxito', result });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

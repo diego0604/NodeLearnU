@@ -1,16 +1,27 @@
-import express from 'express';
-import cors from 'cors'; 
-const app = require();
+require('./config/configServer');
 
-app.use(express,json());
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+// Habilitar estos modulos
+app.use(express.json());
 app.use(cors());
 
-import userRoutes from './routes/user.routes';
-import authRoutes from './routes/auth.routes';
-import projectRoutes from './routes/project.routes';
+// Importar rutas
+const userRoutes = require('./routes/user.routes');
+const authRoutes = require('./routes/auth.routes');
+const projectRoutes = require('./routes/project.routes');
 
-app.use('./api/v1', userRoutes);
-app.use('./api/v1', authRoutes);
-app.use('./api/v1', projectRoutes);
+// Habilitar esta rutas
+app.use('/api/v1', userRoutes);
+app.use('/api/v1', authRoutes);
+app.use('/api/v1', projectRoutes);
 
-export default app;
+// Al final de tu archivo app.js
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`);
+});
+
+module.exports = app;
