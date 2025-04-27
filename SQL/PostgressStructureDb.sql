@@ -1,5 +1,10 @@
 
-
+DROP TABLE IF EXISTS usuarios_proyectos CASCADE;
+DROP TABLE IF EXISTS roles_permisos CASCADE;
+DROP TABLE IF EXISTS proyectos CASCADE;
+DROP TABLE IF EXISTS usuarios CASCADE;
+DROP TABLE IF EXISTS roles CASCADE;
+DROP TABLE IF EXISTS permisos CASCADE;
 -- 1. Crear tabla permisos
 CREATE TABLE permisos (
     id SERIAL PRIMARY KEY,
